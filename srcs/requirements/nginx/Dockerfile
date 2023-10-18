@@ -1,6 +1,9 @@
 # Version
 FROM	debian:buster
 
+# Open the port
+EXPOSE	443
+
 # Install services
 RUN	apt update
 RUN	apt install nginx	-y
