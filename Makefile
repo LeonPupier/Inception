@@ -23,7 +23,7 @@ clean:
 	@sudo docker rmi srcs-nginx srcs-wordpress srcs-mariadb 2>/dev/null || true
 	@sudo docker network rm inception_net 2>/dev/null || true
 	sudo rm -rf ${HOME}/data
-	@sudo sed -i '/127.0.0.1 lepupier.42.fr/d' /etc/hosts && echo "successfully removed lpupier.42.fr to /etc/hosts"
+	@sudo sed -i '/127.0.0.1 lpupier.42.fr/d' /etc/hosts && echo "successfully removed lpupier.42.fr to /etc/hosts"
 	# @docker system prune --all # remove comment will remove every cached docker data 
 
 re: clean all

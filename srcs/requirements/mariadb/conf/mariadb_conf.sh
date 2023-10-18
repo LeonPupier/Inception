@@ -2,14 +2,12 @@
 
 set -e
 
-# Start MySQL service
 service mysql start
 
-if [ ! -d "/var/lib/mysql/$SQL_DATABASE" ]
+if [ ! -d "/var/lib/mysql/$WP_TITLE" ]
 
 then
 
-# Secure install
 mysql_secure_installation << EOF
 
 n
@@ -19,25 +17,14 @@ y
 y
 EOF
 
-# Create the SQL_DATABASE database
-mysql -uroot -e "CREATE DATABASE IF NOT EXISTS $SQL_DATABASE;"
-
-# Create the SQL_USER with the SQL_PASSWORD password
-mysql -uroot -e "CREATE USER IF NOT EXISTS '$SQL_USER'@'%' IDENTIFIED BY '$SQL_PASSWORD';"
-
-# Give rights to SQL_USER on SQL_DATABASE
-mysql -uroot -e "GRANT ALL PRIVILEGES ON $SQL_DATABASE.* TO '$SQL_USER'@'%';"
-
-# Update the configuration of MySQL
+mysql -uroot -e "CREATE DATABASE IF NOT EXISTS $WP_TITLE;"
+mysql -uroot -e "CREATE USER IF NOT EXISTS '$WP_USER_LOGIN'@'%' IDENTIFIED BY '$WP_USER_PASSWORD';"
+mysql -uroot -e "GRANT ALL PRIVILEGES ON $WP_TITLE.* TO '$WP_USER_LOGIN'@'%';"
 mysql -uroot -e "FLUSH PRIVILEGES;"
-
-# Change root rights with the SQL_ROOT_PASSWORD password
-mysql -uroot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$SQL_ROOT_PASSWORD';"
+mysql -uroot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';"
 
 fi
 
-# Shudown MySQL
-mysqladmin -u root -p$SQL_ROOT_PASSWORD shutdown
+mysqladmin -u root -p$MYSQL_ROOT_PASSWORD shutdown
 
-# Restart MySQL with the new configuration
 exec "$@"
