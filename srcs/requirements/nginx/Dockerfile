@@ -1,27 +1,14 @@
-# Version
-FROM	debian:buster
+FROM debian:buster
 
-# Open the port
-EXPOSE	443
+RUN apt-get update && apt-get install -y nginx openssl
 
-# Install services
-RUN	apt update
-RUN	apt install nginx	-y
-RUN	apt install vim		-y
-RUN	apt install curl	-y
+EXPOSE 443
 
-# Install OpenSSL and generate a certificate
-RUN	mkdir -p /etc/nginx/ssl
-RUN	apt install openssl	-y
-RUN	openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout /etc/nginx/ssl/inception.key -subj "/C=FR/L=Lyon/0=42/OU=lpupier/CN=lpupier.42.fr"
+COPY ./conf/default /etc/nginx/sites-enabled/default
 
-# Create the configuration folder of Nginx
-RUN	mkdir -p /var/run/nginx
-COPY	conf/nginx.conf etc/nginx/nginx.conf
+COPY ./tools/nginx_start.sh /var/www
+RUN chmod +x /var/www/nginx_start.sh
 
-# Server configuration
-RUN	chmod 755 /var/www/html
-RUN	chown -R www-data:www-data /var/www/html
+ENTRYPOINT [ "/var/www/nginx_start.sh" ]
 
-# Start Nginx
-CMD	["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
