@@ -24,7 +24,7 @@ clean:
 	@docker volume rm db wp 2>/dev/null || true
 	@docker rmi srcs-nginx srcs-wordpress srcs-mariadb 2>/dev/null || true
 	@docker network rm inception_net 2>/dev/null || true
-	rm -rf ${HOME}/data
+	sudo rm -rf ${HOME}/data
 	@sudo sed -i '/127.0.0.1 lpupier.42.fr/d' /etc/hosts && echo "lpupier.42.fr removed in /etc/hosts"
 
 # Purge all cached data of dockers
