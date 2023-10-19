@@ -15,8 +15,8 @@ COPY		./conf/www.conf /etc/php/7.3/fpm/pool.d
 COPY		./tools /var/www/
 
 # Wordpress installation
-RUN		chmod +x /var/www/auto_install.sh		
+RUN		chmod +x /var/www/auto_install.sh
+ENTRYPOINT	["/var/www/auto_install.sh"]
 
 # Start WordPress
-ENTRYPOINT	["/var/www/auto_install.sh"]
 CMD		["/usr/sbin/php-fpm7.3", "--nodaemonize"]

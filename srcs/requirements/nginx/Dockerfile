@@ -1,13 +1,21 @@
-FROM debian:buster
+# Version
+FROM		debian:buster
 
-RUN apt-get update && apt-get install -y nginx openssl
+# Install dependencies
+RUN		apt-get update 
+RUN		apt-get install nginx	-y
+RUN		apt-get install openssl	-y
 
-EXPOSE 443
+# Open port
+EXPOSE		443
 
-COPY ./conf/nginx.conf /etc/nginx/sites-enabled/default
-COPY ./tools/nginx_start.sh /var/www
-RUN chmod +x /var/www/nginx_start.sh
+# Copy data to the docker env
+COPY		./conf/nginx.conf /etc/nginx/sites-enabled/default
+COPY		./tools/nginx_start.sh /var/www
+RUN		chmod +x /var/www/nginx_start.sh
 
-ENTRYPOINT [ "/var/www/nginx_start.sh" ]
+# Launch the configuration of Nginx
+ENTRYPOINT	["/var/www/nginx_start.sh"]
 
-CMD ["nginx", "-g", "daemon off;"]
+# Execute Nginx
+CMD		["nginx", "-g", "daemon off;"]

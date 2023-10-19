@@ -1,15 +1,18 @@
 #!/bin/bash
 
+# Replace options on configuration file
 sed -i "s/listen = \/run\/php\/php7.3-fpm.sock/listen = 9000/" "/etc/php/7.3/fpm/pool.d/www.conf";
 chown -R www-data:www-data /var/www/*;
 chown -R 755 /var/www/*;
 mkdir -p /run/php/;
 touch /run/php/php7.3-fpm.pid;
 
+# If the WordPress config file doesn't exist
 if [ ! -f /var/www/html/wp-config.php ]; then
   echo "Wordpress: setting up..."
   mkdir -p /var/www/html
 
+  # Download the CLI to manage WordPress
   wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
   chmod +x wp-cli.phar
   mv wp-cli.phar /usr/local/bin/wp
@@ -17,6 +20,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
   cd /var/www/html
   wp core download --allow-root
 
+  # Check env variables
   if [ -z "$WP_TITLE" ] || [ -z "$WP_USER_LOGIN" ] || [ -z "$WP_USER_PASSWORD" ] || [ -z "$WP_DB_HOST" ]; then
     echo "Error: Environment variables not defined."
     echo "Check that WP_TITLE, WP_USER_LOGIN, WP_USER_PASSWORD and WP_DB_HOST are correctly defined in the .env file."
@@ -30,6 +34,8 @@ if [ ! -f /var/www/html/wp-config.php ]; then
   if [ -n "$wp_keys" ]; then
     # Generate the file wp-config.php with the new secret keys
     cat > /var/www/html/wp-config.php <<EOL
+
+# Fill the wp-config.php with env variables
 <?php
 define( 'DB_NAME', '${WP_TITLE}' );
 define( 'DB_USER', '${WP_USER_LOGIN}' );
@@ -52,6 +58,7 @@ EOL
     exit 1
   fi
 
+  # Create users for WordPress
   echo "Wordpress: creating users..."
   wp core install --allow-root --url=${WP_URL} --title=${WP_TITLE} --admin_user=${WP_ADMIN_LOGIN} --admin_password=${WP_ADMIN_PASSWORD} --admin_email=${WP_ADMIN_EMAIL}
   wp user create --allow-root ${WP_USER_LOGIN} ${WP_USER_EMAIL} --user_pass=${WP_USER_PASSWORD}
