@@ -32,10 +32,8 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 
   # Check that key import has been successful
   if [ -n "$wp_keys" ]; then
-    # Generate the file wp-config.php with the new secret keys
     cat > /var/www/html/wp-config.php <<EOL
 
-# Fill the wp-config.php with env variables
 <?php
 define( 'DB_NAME', '${WP_TITLE}' );
 define( 'DB_USER', '${WP_USER_LOGIN}' );
@@ -58,7 +56,6 @@ EOL
     exit 1
   fi
 
-  # Create users for WordPress
   echo "Wordpress: creating users..."
   wp core install --allow-root --url=${WP_URL} --title=${WP_TITLE} --admin_user=${WP_ADMIN_LOGIN} --admin_password=${WP_ADMIN_PASSWORD} --admin_email=${WP_ADMIN_EMAIL}
   wp user create --allow-root ${WP_USER_LOGIN} ${WP_USER_EMAIL} --user_pass=${WP_USER_PASSWORD}
