@@ -16,7 +16,7 @@ Before getting started, ensure that you have the following installed on your sys
    ```
 2. Navigate to the project directory:
    ```
-   cd inception
+   cd Inception
    ```
 3. Start the Docker containers using Docker Compose by the Makefile:
    ```
