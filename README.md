@@ -2,7 +2,7 @@
 *42 project by Leon Pupier.*
 
 ## Description
-The Inception project serves as an introduction to the world of system and network administration. The primary objective is to create a Docker-based virtual machine capable of deploying various web services, including an Nginx web server, an FTP server, a WordPress server, and a MySQL database.
+The Inception project serves as an introduction to the world of system and network administration. The primary objective is to create a Docker-based virtual machine capable of deploying various web services, including an Nginx web server, a WordPress server, and a MySQL database.
 
 ## Prerequisites
 Before getting started, ensure that you have the following installed on your system:
